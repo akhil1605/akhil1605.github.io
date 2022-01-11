@@ -1,0 +1,16 @@
+[
+    {
+        "district" : "Kollam",
+        "stops" : ["Kollam Railway Station" , "Mukhathala" , "Kundara" , "Mulavana" ]
+    },
+    {
+        "district" : "Ernakulam",
+        "stops" : ["Edapally Bus Stop" ,
+         "Menaka Bus Stop" , "Kadavanthra Bus Stop", "St. Alberts Bus Stop"]
+    },
+    {
+        "district" : "Kottayam",
+        "stops" : ["Old Private Bus Stop" ,
+         "C.M.S College Bus Stop" , "Logos Junction Bus Stop", "Sastri road Bus Stop"]
+    }
+]

@@ -1,0 +1,18 @@
+[
+    {
+        "id"    : 1 , 
+        "name"  : "bus1",
+        "description" : "via Kundara and Mulavana",
+        "stops" : {"Kollam Railway Station":"10:00 AM" , "Kundara":"11:00 AM" ,  "Mulavana": "12:00 PM"} 
+    },
+    {
+        "id" : 2 , 
+        "name" : "bus2",
+        "stops": {"Edapally Bus Stop":"09:00 AM" , "St. Alberts Bus Stop" : "01:00 PM"}
+    },
+    {
+        "id" : 3,
+        "name" : "bus3",
+        "stops": {"Kollam Railway Station":"08:00 AM" , "Mulavana": "10:00 AM"}
+    }
+]
