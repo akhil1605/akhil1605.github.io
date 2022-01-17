@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+   <head>
+        <title>Bus Search</title>
+        <meta name="viewport"  content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="app/index.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+        <script src="script/angular.min.js"></script>
+        <script src="app/bus-search.js"></script>
+   </head> 
+   <body>
+        <nav class="px-5 py-3 shadow">
+            <h3 class="display-4">Bus Search</h3>
+        </nav>
+        <div class="container-fluid"  ng-app="busApp" ng-controller="busController">
+
+            <div class="row text-center">
+
+                <!-- From Portion -->
+                <div class="col-md-4 col-sm-4">
+                    <div class="card shadow-lg p-5 mx-4 mt-5">
+                        <h4>From</h4>
+                        <h5>District : </h5>
+                        
+                        <select  ng-model="fromDistrict" ng-change="updateStopWithFromDistrict()" >
+                            <option ng-repeat="x in districts" value="{{x.district}}">{{x.district}}</option>
+                        </select><br>
+
+                        <!-- Fetch Stops based on fromDistrict. Use showTable for hiding table and dirtyFlag 
+                        for making fromStop to dirty on change  -->
+                        <h5>Stop : </h5>
+                        <select ng-model="fromStop" ng-change="showTable=false;dirtyFlag=true;loading:false"  ng-options="stop for stop in fromStops">
+                        </select>
+                    </div>
+                </div>
+
+                <!--  To Portion -->
+                <div class="col-md-4 col-sm-4">
+                    <div class="card shadow-lg p-5 mx-4 mt-5">
+                        <h4>To</h4>
+                        <h5>District : </h5>
+                        <select ng-model="toDistrict" ng-change="updateStopWithToDistrict()">
+                            <option ng-repeat="x in districts" value="{{x.district}}">{{x.district}}</option>
+                        </select><br>
+
+                        <!-- Fetch Stops based on toDistrict. Use showTable for hiding table and dirtyFlag 
+                        for making toStop to dirty on change  -->
+                        <h5>Stop : </h5>
+                        <select ng-model="toStop" ng-change="showTable=false; dirtyFlag=true; loading=false" ng-options="stop for stop in toStops">
+                        </select>
+
+                    </div>
+                </div>
+                
+                <div class="col-md-4 col-sm-4">
+                    <div class="mx-4 mt-5"> ADVERTISEMENT </div>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="row ">
+                <div class="col-md-8 col-sm-8">
+                    <div class="card shadow-lg p-5 mx-4 mt-5">
+                        <!-- Displays the current time -->
+                        <h5>Time : {{clock |  date:'hh:mm a'}}</h5>
+
+                        <!-- Will be disabled if fromDistrict and toDistrict are same and fromStop and toStop are same -->
+                        <button type="button" class="btn btn-success btn-lg mt-5" ng-disabled="fromDistrict == toDistrict && fromStop==toStop" ng-click="findBus()"><h5 style="display: inline;">Search</h5><i class="bi bi-search p-3"></i></button> 
+                        <br>
+                        
+                        <!-- Shows error message if both destination  and Origin are same -->
+                        <div ng-if="fromDistrict == toDistrict && fromStop==toStop && dirtyFlag" class="alert alert-danger text-center">
+                            Origin and Destination cannot be same - {{fromStop}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shows No buses found message -->
+            <div class="row mt-5" ng-if="noBusFound">
+                <div class="col-md-12 table-col">
+                    <div class="card shadow-lg m-4 p-4">
+                        <div class="alert alert-dark text-center" role="alert">
+                            <h2>No bus found !</h2>
+                          </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5" ng-if="loading && !showTable && !noBusFound">
+                <div class="col-md-12  text-center">
+                    <div class="card shadow-lg m-4 p-5">
+                        <div class="d-flex justify-content-center">
+                            <div class="spinner-border" role="status">
+                            </div>
+                            <h4 class="px-2">Loading...</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shows the results of the bus search if the showTable value is true -->
+            <div class="row mt-5" ng-if="showTable">
+                <div class="col-md-12 col-sm-12">
+                    <div class="card shadow-lg m-2 p-3">
+                        <table class="table table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col">BUS</th>
+                                    <th scope="col">{{fromStop}}</th>
+                                    <th scope="col">{{toStop}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="bus in filteredBuses">
+                                    <td> {{bus.name}} <br> {{bus.description}}</td>  
+                                    <td ng-repeat="(stop,time) in bus.stops" ng-if="stop==fromStop">{{time}}</td> <!--Shows Arrival time-->
+                                    <td ng-repeat="(stop,time) in bus.stops" ng-if="stop==toStop">{{time}}</td> <!-- Shows Departure time -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="justify-content p-5">
+                Disclaimer : Some buses may not be available and timings may vary due to unexpected situations or traffic conditions. 
+                We are not responsible for those occurences.
+            </div>
+
+        </div>
+
+        <footer class="page-footer mt-5 p-4">    
+            <p href="#" class="m-5 d-inline">REPORT A PROBLEM</p>
+            <p href="#" class="m-5 d-inline">BLOG</p>
+        </footer>
+
+   </body>
+</html>
