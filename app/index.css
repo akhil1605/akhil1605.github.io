@@ -1,5 +1,17 @@
-
-#search
+nav, footer
 {
-    width: 50px !important;
+    background-color: #0c054a;
+    color: white;
 }
+
+.container-fluid
+{
+    font-family :cursive;
+}
+
+footer
+{
+    font-size: 1.5rem;
+}
+
+

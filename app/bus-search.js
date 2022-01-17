@@ -11,6 +11,20 @@ app.controller("busController", function($scope , $http, $interval)
 
     //As fromStop.$dirty and toStop.$dirty is not working
     $scope.dirtyFlag = false;
+
+
+    let req = new XMLHttpRequest();
+
+    req.onreadystatechange = () => {
+    if (req.readyState == XMLHttpRequest.DONE) {
+        $scope.buses = JSON.parse(req.responseText);
+    }
+    };
+
+    req.open("GET", "https://api.jsonbin.io/v3/b/61debfa9a34b603fd981f9ec/latest", true);
+    req.setRequestHeader("X-Master-Key", "$2b$10$Xt/b2Zf9RZld8qrVHE6yie7BEXm/YTQ5huAfwSHKeuYYzXDO4Wv1C");
+    req.setRequestHeader("X-Bin-Meta", false);
+    req.send();
     
     //For displaying the current time
     var tick = function() {
@@ -29,10 +43,7 @@ app.controller("busController", function($scope , $http, $interval)
                     $scope.fromStops = $scope.districts[i].stops ; 
                     break;
                 }
-                else
-                {
-                    console.log("From District cannot be found");
-                }
+            
         }
 
         //Assign first stop from stops list to fromStop
@@ -54,17 +65,13 @@ app.controller("busController", function($scope , $http, $interval)
                 $scope.toStops = $scope.districts[i].stops ;
                 break;
             }
-            else
-            {
-                console.log("To District cannot be found");
-            }
         }
         $scope.toStop =  $scope.toStops[0]; 
         $scope.showTable = false ;
     }
 
 
-    $http.get('bus/stops.json').then(function(response)
+    $http.get('app/bus/stops.json').then(function(response)
     {
         $scope.districts = response.data;
         $scope.updateStopWithFromDistrict();
@@ -73,15 +80,21 @@ app.controller("busController", function($scope , $http, $interval)
         console.log("ERROR IN FETCHING DISTRICTS DATA:", response);
     });
 
+    /*
+
     $http.get('bus/buses.json').then(function(response)
     {
-        $scope.buses = response.data;
+        $scope.buses1 = response.data;
+        console.log("Buses : " + $scope.buses1);
     }).catch(function(response) {
         console.log("ERROR IN FETCHING BUS DATA:", response);
     });
 
+    */
+
     $scope.findBus = function()
     {
+        $scope.loading=true;
         $scope.filteredBuses = [];
 
         for(var i in $scope.buses)
@@ -96,8 +109,6 @@ app.controller("busController", function($scope , $http, $interval)
                 }
             }
         }
-
-        console.log( $scope.filteredBuses);
 
         if($scope.filteredBuses.length === 0)
         {
